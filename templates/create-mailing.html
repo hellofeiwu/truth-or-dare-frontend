@@ -1,0 +1,7 @@
+<div class="loading-message" ng-if="loadingToggle">{{loadingMessage}}</div>
+<div class="container">
+    <button ng-click="register()">register</button>
+    <ul ng-repeat="item in questions">
+        <li>{{item.question}}</li>
+    </ul>
+</div>

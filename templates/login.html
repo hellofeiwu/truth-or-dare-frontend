@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="login">
+        <img src="img/logo_login.png"/>
+        <div class="login-container">
+            <h1>登录</h1>
+
+            <div class="form-control input-box">
+                <i class="fa fa-user"></i>
+                <input type="text" placeholder='用户名' ng-model="user.username">
+            </div>
+
+            <div class="form-control input-box">
+                <i class="fa fa-lock"></i>
+                <input type="password" placeholder='密码' ng-model="user.password" ng-keyup="loginWithKey($event.keyCode)">
+            </div>
+            <p>忘记密码？</p>
+            <hr style="border-top: dotted 1px;" />
+            <button ng-click="login()">登录</button>
+        </div>
+    </div>
+
+</div>
