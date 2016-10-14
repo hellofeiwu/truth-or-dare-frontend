@@ -307,7 +307,7 @@ app.controller('QuestionController', function(
     };
 
     $scope.register = function() {
-        CreateQuestionService.register(
+        QuestionService.register(
             function successCallback(data) {
 
             },
