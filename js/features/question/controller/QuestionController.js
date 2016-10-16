@@ -16,6 +16,7 @@ app.controller('QuestionController', function(
 ) {
     if (!localStorage.getItem('TOKEN')) {
         $location.path('/login');
+        return;
     }
 
     $scope.searchQuery = '';
