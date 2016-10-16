@@ -1,5 +1,5 @@
 app.constant('CONF', {
-    "api": "http://localhost:3000",
+    "api": "http://truth-or-dare-api.herokuapp.com",
     "acpapi": "http://acpapi.com/API",
     "version": "1.0.0",
     "defaultLang": "zh",
