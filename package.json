@@ -4,7 +4,8 @@
   "description": "1. clone this project 2. run `bower install` 3. run `npm install sero-cli -g` to install frontend server, for more info, https://github.com/leftstick/Sero-cli 4. visit http://localhost:8080",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "bower install"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/hellofeiwu/truth-or-dare-frontend/issues"
   },
-  "homepage": "https://github.com/hellofeiwu/truth-or-dare-frontend#readme"
+  "homepage": "https://github.com/hellofeiwu/truth-or-dare-frontend#readme",
+  "dependencies": {
+    "http-server": "^0.9.0",
+    "bower": "^1.7.9"
+  }
 }
