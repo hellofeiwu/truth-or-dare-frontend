@@ -17,7 +17,7 @@ app.config(function(
     $routeProvider
         .when('/',{
             controller: 'QuestionController',
-            templateUrl: 'templates/create-mailing.html'
+            templateUrl: 'templates/question.html'
         })
         .when('/login',{
             controller: 'LoginController',

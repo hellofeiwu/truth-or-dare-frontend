@@ -1,0 +1,25 @@
+<div class="container">
+    <div ng-if="pageFlag == 'question'">
+        <button ng-click="register()">register</button>
+        <p>{{question}}</p>
+        <button ng-click="getQuestion()">change</button>
+        <button ng-click="toggleType()" ng-if="type == 'truth'">dare</button>
+        <button ng-click="toggleType()" ng-if="type == 'dare'">truth</button>
+    </div>
+    <div ng-if="pageFlag == 'addQuestion'">
+        <textarea
+                rows="3"
+                placeholder="Type your questions here..."
+                ng-model="newQuestion.question"
+                >
+        </textarea>
+        <select
+                class="form-control"
+                ng-model="newQuestion.type"
+                ng-options="type as type for type in types"
+                >
+        </select>
+        <button ng-click="addQuestion()">Submit</button>
+        <button ng-click="showQuestion()">Cancel</button>
+    </div>
+</div>
