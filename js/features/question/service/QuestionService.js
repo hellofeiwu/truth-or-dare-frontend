@@ -3,7 +3,7 @@ app.factory('QuestionService', function(
         HttpRequestService
     ) {
         var self = this;
-        this.createQuestion = function(data, successCallback, errorCallback) {
+        this.addQuestion = function(data, successCallback, errorCallback) {
             HttpRequestService.http_request_with_data_auth(
                 '/question',
                 'POST',

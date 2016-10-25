@@ -2,14 +2,13 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">取消</h4>
+                <h4 class="modal-title">提示</h4>
             </div>
             <div class="modal-body" style="text-align: center">
-                <p ng-if="cancelType == 0">是否取消该包裹的发运？</p>
-                <p ng-if="cancelType == 1">是否取消该大包组合？</p>
+                <p>This is the last question, do you want to add more questions?</p>
             </div>
             <div class="modal-footer" style="text-align: center">
-                <button type="button" class="btn btn-primary" ng-click="operation(item)">确定</button>
+                <button type="button" class="btn btn-primary" ng-click="operation()">Add</button>
                 <button type="button" class="btn btn-default" ng-click="$hide()">{{'cancel' | translate}}</button>
             </div>
         </div>

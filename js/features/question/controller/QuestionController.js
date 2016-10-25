@@ -12,299 +12,177 @@ app.controller('QuestionController', function(
     $anchorScroll,
     $modal,
     QuestionService,
-    CountryCodeService
+    $routeParams
 ) {
-    if (!localStorage.getItem('TOKEN')) {
-        $location.path('/login');
-    }
+    $scope.pageFlag = 'question';
+    $scope.question = '';
+    $scope.type = $routeParams.type;
+    var truthQuestions = [];
+    var dareQuestions = [];
+    $scope.types = ['truth', 'dare'];
+    $scope.newQuestion = {
+        question: '',
+        type: 'truth'
+    };
 
-    $scope.searchQuery = '';
-
-    $scope.role = localStorage.getItem('ROLE');
-
-    $scope.testMode = 1;
-    $scope.expressClearance = 0;
-    $scope.ddp = 0;
-
-    $scope.statusFlag = $scope.role == 'admin' ? 'pending' : 'received';
-
-    $scope.orders = [];
-    $scope.length = '';
-    $scope.width = '';
-    $scope.height = '';
-
-    $scope.labelTypes = [
-        {
-            key: 'Ground',
-            value: 1
-        },
-        {
-            key: 'Expedited',
-            value: 2
-        },
-        {
-            key: 'Priority',
-            value: 3
-        },
-        {
-            key: 'Mini label',
-            value: 12
-        },
-        {
-            key: 'Canada label',
-            value: 20
-        },
-        {
-            key: 'China label',
-            value: 30
-        },
-        {
-            key: 'TrakPak label',
-            value: 40
+    $scope.getQuestion = function() {
+        if ($scope.type == 'truth') {
+            $scope.questions = truthQuestions;
+        }else {
+            $scope.questions = dareQuestions;
         }
-    ];
-
-    $scope.labelFormats = [
-        'PNG',
-        'PDF',
-        'EPL2'
-    ];
-
-    $scope.currencyOptions = [
-        'USD',
-        'EUR',
-        'RMB'
-    ];
-
-    $scope.countryCodes = CountryCodeService.countryCodes;
-
-    $scope.shippingRequest = {
-        labelType: 1,
-        labelFormat: 'PNG',
-        data: {
-            shippingApiRequest: {
-                mailItem: {
-                    trackingNumber: '',
-                    shipperItemId: "",
-                    displayItemId: "",
-                    consignee: {
-                        name: "",
-                        companyName: "",
-                        addressLine1: "",
-                        addressLine2: "",
-                        city: "",
-                        state: "",
-                        zip: "",
-                        country: "US",
-                        phone: "",
-                        email: ""
-                    },
-                    shipper: {
-                        name: "alibaba",
-                        companyName: "Amazon",
-                        addressLine1: "some address",
-                        city: "some city",
-                        state: "EU",
-                        zip: "12345",
-                        country: "GB"
-                    },
-                    returnAddress: {
-                        name: "John Smith",
-                        companyName: "Shippers, LLC",
-                        addressLine1: "LAX",
-                        city: "Los Angeles",
-                        state: "CA",
-                        zip: "90045",
-                        country: "US",
-                        phone: "1 (800) 426-4968"
-                    },
-                    value: 0,
-                    currency: "USD",
-                    weight: "",
-                    weightUnitOfMeasure: "kg",
-                    dimensions: {
-                        length: 0,
-                        width: 0,
-                        height: 0
-                    },
-                    dimensionsUnitOfMeasure: "m",
-                    product: [
-                        {
-                            harmonizationCode: "",
-                            description: "",
-                            manufacturerCode: "",
-                            quantity: 0,
-                            unitValue: 0,
-                            value: 0
-                        }
-                    ]
-                }
-            }
+        if ($scope.questions.length) {
+            var i = Math.floor((Math.random() * $scope.questions.length));
+            $scope.question = $scope.questions[i].question;
+            $scope.questions.splice(i, 1);
+        }else {
+            $scope.showConfirmModal(showAddQuestion);
         }
     };
 
-    $scope.toggleAll = function() {
-        if ($scope.selectedAll) {
-            $scope.selectedAll = true;
-        } else {
-            $scope.selectedAll = false;
+    var showAddQuestion = function() {
+        confirmModal.hide();
+        if (localStorage.getItem('TOKEN')) {
+            $scope.pageFlag = 'addQuestion';
+        }else {
+            $location.path('/login');
         }
-        angular.forEach($scope.questions, function (item) {
-            item.selected = $scope.selectedAll;
-        });
+    };
+
+    $scope.showQuestion = function() {
+        $scope.pageFlag = 'question';
     };
 
     var getQuestions = function() {
         QuestionService.getQuestions(
             function successCallback(data) {
-                $scope.questions = data;
-            },
-            function errorCallback() {
-
-            }
-        );
-    };
-
-    getQuestions();
-
-    $scope.totalValue = function() {
-        $scope.shippingRequest.data.shippingApiRequest.mailItem.value = 0;
-        angular.forEach(
-            $scope.shippingRequest.data.shippingApiRequest.mailItem.product,
-            function(item) {
-                item.value = item.unitValue * item.quantity;
-                $scope.shippingRequest.data.shippingApiRequest.mailItem.value += item.value;
-            }
-        );
-    };
-
-    $scope.createQuestion = function() {
-        $scope.disableCreateQuestion = true;
-
-        // update size to be in unit m
-        $scope.shippingRequest.data.shippingApiRequest.mailItem.dimensions.length = $scope.length * 0.01;
-        $scope.shippingRequest.data.shippingApiRequest.mailItem.dimensions.width = $scope.width * 0.01;
-        $scope.shippingRequest.data.shippingApiRequest.mailItem.dimensions.height = $scope.height * 0.01;
-
-        $scope.loadingToggle = true;
-        $scope.loadingMessage = '正在创建邮包中，请稍后...';
-
-        $scope.shippingRequest.testMode = $scope.testMode;
-        $scope.shippingRequest.expressClearance = $scope.expressClearance;
-        $scope.shippingRequest.ddp = $scope.ddp;
-        QuestionService.createQuestion(
-            $scope.shippingRequest,
-            function successCallback(data) {
-                if (data.shippingApiResponse.error) {
-                    noty({
-                        layout: 'center',
-                        text: data.shippingApiResponse.error,
-                        type: 'warning',
-                        animation: {
-                            open: {height: 'toggle'}, // jQuery animate function property object
-                            close: {height: 'toggle'}, // jQuery animate function property object
-                            easing: 'swing', // easing
-                            speed: 500 // opening & closing animation speed
-                        },
-                        timeout: 1000
-                    });
-                    $scope.loadingToggle = false;
-                    $scope.disableCreateQuestion = false;
-                    return;
-                }else if (data.shippingApiResponse.mailItem.result == 'ok') {
-                    noty({
-                        layout: 'center',
-                        text: '创建邮包成功!',
-                        type: 'success',
-                        animation: {
-                            open: {height: 'toggle'}, // jQuery animate function property object
-                            close: {height: 'toggle'}, // jQuery animate function property object
-                            easing: 'swing', // easing
-                            speed: 500 // opening & closing animation speed
-                        },
-                        timeout: 1000
-                    });
-                }else {
-                    noty({
-                        layout: 'center',
-                        text: data.shippingApiResponse.mailItem.error,
-                        type: 'warning',
-                        animation: {
-                            open: {height: 'toggle'}, // jQuery animate function property object
-                            close: {height: 'toggle'}, // jQuery animate function property object
-                            easing: 'swing', // easing
-                            speed: 500 // opening & closing animation speed
-                        },
-                        timeout: 1000
-                    });
-                    $scope.loadingToggle = false;
-                    $scope.disableCreateQuestion = false;
-                    return;
-                }
-                $scope.loadingToggle = false;
-                $scope.disableCreateQuestion = false;
-                getQuestions();
-                $location.hash('questionsAnchor');
-                $anchorScroll();
-            },
-            function errorCallback() {
-                $scope.disableCreateQuestion = false;
-                $scope.loadingToggle = false;
-            }
-        );
-    };
-
-    $scope.deleteQuestion = function(trackingNumber) {
-        confirmModal.hide();
-        $scope.loadingToggle = true;
-        $scope.loadingMessage = '正在取消邮包中，请稍后...';
-        CreateQuestionService.deleteQuestion(
-            {
-                testMode: $scope.testMode,
-                data: {
-                    shippingApiRequest: {
-                        mailItem: {
-                            trackingNumber: trackingNumber
+                truthQuestions = data;
+                angular.forEach(
+                    truthQuestions,
+                    function(value) {
+                        if (value.type == 'dare'){
+                            dareQuestions.push(value);
                         }
                     }
-                }
-            },
-            function successCallback(data) {
-                if (data.shippingApiResponse.mailItem.result == 'ok') {
-                    noty({
-                        layout: 'center',
-                        text: '邮件删除成功!',
-                        type: 'success',
-                        animation: {
-                            open: {height: 'toggle'}, // jQuery animate function property object
-                            close: {height: 'toggle'}, // jQuery animate function property object
-                            easing: 'swing', // easing
-                            speed: 500 // opening & closing animation speed
-                        },
-                        timeout: 1000
-                    });
-                }else {
-                    noty({
-                        layout: 'center',
-                        text: data.shippingApiResponse.mailItem.error,
-                        type: 'warning',
-                        animation: {
-                            open: {height: 'toggle'}, // jQuery animate function property object
-                            close: {height: 'toggle'}, // jQuery animate function property object
-                            easing: 'swing', // easing
-                            speed: 500 // opening & closing animation speed
-                        },
-                        timeout: 1000
-                    });
-                }
-                getQuestions();
-                $scope.loadingToggle = false;
+                );
+                truthQuestions = _.difference(truthQuestions, dareQuestions);
+                $scope.getQuestion();
             },
             function errorCallback() {
-                $scope.loadingToggle = false;
+
             }
         );
     };
+
+    $scope.addQuestion = function() {
+        QuestionService.addQuestion(
+            $scope.newQuestion,
+            function successCallback() {
+                $scope.pageFlag = 'question';
+                noty({
+                    layout: 'center',
+                    text: 'question added',
+                    type: 'success',
+                    animation: {
+                        open: {height: 'toggle'}, // jQuery animate function property object
+                        close: {height: 'toggle'}, // jQuery animate function property object
+                        easing: 'swing', // easing
+                        speed: 500 // opening & closing animation speed
+                    },
+                    timeout: 1000
+                });
+            },
+            function errorCallback() {
+
+            }
+        );
+    };
+
+    $scope.toggleType = function() {
+      if ($scope.type == 'truth') {
+          $scope.type = 'dare';
+      }else {
+          $scope.type = 'truth';
+      }
+        $scope.getQuestion();
+    };
+
+    if (localStorage.getItem('TOKEN')) {
+            getQuestions();
+    }else {
+        truthQuestions = [
+            {
+                "question": "你们家里谁的脾气最大"
+            },
+            {
+                "question": "现在想被有钱人保养么"
+            },
+            {
+                "question": "你会做菜么"
+            },
+            {
+                "question": "每天上网几个小时"
+            },
+            {
+                "question": "请说出在座谁昨天没有洗澡"
+            },
+            {
+                "question": "今天晚上要做什么"
+            },
+            {
+                "question": "异性知己有几个"
+            },
+            {
+                "question": "上厕所后洗手么"
+            },
+            {
+                "question": "你最受不了别人对你做什么"
+            },
+            {
+                "question": "觉得失去什么最可怕"
+            },
+            {
+                "question": "你觉得自己什么时候身体发育成熟的"
+            }
+        ];
+
+        dareQuestions = [
+            {
+                "question": "背一位异性绕场一周"
+            },
+            {
+                "question": "唱青藏高原最后一句"
+            },
+            {
+                "question": "做一个大家都满意的鬼脸"
+            },
+            {
+                "question": "抱一位异性直到下一轮真心话大冒险结束"
+            },
+            {
+                "question": "向一位异性表白3分钟"
+            },
+            {
+                "question": "与一位异性十指相扣，对视10秒"
+            },
+            {
+                "question": "邀请一位异性为你唱情歌，或邀请一位异性与你情歌对唱"
+            },
+            {
+                "question": "做自己最性感、最妩媚的表情或动作"
+            },
+            {
+                "question": "吃下每个人为你夹的菜"
+            },
+            {
+                "question": "跳草裙舞或脱衣舞"
+            },
+            {
+                "question": "亲吻一位异性，部位不限"
+            }
+        ];
+        $scope.getQuestion();
+    }
 
     $scope.register = function() {
         QuestionService.register(
@@ -317,28 +195,6 @@ app.controller('QuestionController', function(
         );
     };
 
-    $scope.visible = null;
-
-    $scope.toggleQuestions = function (data) {
-        if ($scope.visible == null) {
-            $scope.visible = data;
-        }else {
-            $scope.visible = null;
-        }
-    };
-
-    // Pre-fetch an external template populated with a custom scope
-    var labelModal = $modal({
-        scope: $scope,
-        templateUrl: 'templates/label-modal.html',
-        show: false
-    });
-    // Show when some event occurs (use $promise property to ensure the template has been loaded)
-    $scope.showLabelModal = function(label) {
-        $scope.label = 'data:image/png;base64,' + label;
-        labelModal.$promise.then(labelModal.show);
-    };
-
     // Pre-fetch an external template populated with a custom scope
     var confirmModal = $modal({
         scope: $scope,
@@ -346,9 +202,7 @@ app.controller('QuestionController', function(
         show: false
     });
     // Show when some event occurs (use $promise property to ensure the template has been loaded)
-    $scope.showConfirmModal = function(cancelType, item, operation) {
-        $scope.cancelType = cancelType;
-        $scope.item = item;
+    $scope.showConfirmModal = function(operation) {
         $scope.operation = operation;
         confirmModal.$promise.then(confirmModal.show);
     };
