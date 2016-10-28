@@ -111,8 +111,8 @@ app.controller('QuestionController', function(
                     }
                 );
                 truthQuestions = _.difference(truthQuestions, dareQuestions);
-                truthQuestionsCopy = truthQuestions;
-                dareQuestionsCopy = dareQuestions;
+                truthQuestionsCopy = truthQuestions.slice();
+                dareQuestionsCopy = dareQuestions.slice();
                 $scope.getQuestion();
             },
             function errorCallback() {
