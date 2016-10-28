@@ -1,10 +1,11 @@
 <div class="container">
     <div ng-if="pageFlag == 'question'">
-        <button ng-click="register()">register</button>
-        <p>{{question}}</p>
-        <button ng-click="getQuestion()">change</button>
+        <div class="card-container" ng-swipe-left="swipeLeft()" ng-swipe-right="swipeRight()">
+            <div class="card-bottom">loading...</div>
+        </div>
         <button ng-click="toggleType()" ng-if="type == 'truth'">dare</button>
         <button ng-click="toggleType()" ng-if="type == 'dare'">truth</button>
+        <button ng-click="restoreQuestions()">restore</button>
     </div>
     <div ng-if="pageFlag == 'addQuestion'">
         <textarea

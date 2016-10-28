@@ -209,20 +209,53 @@ body {
 .modal-header h4 {
   text-align: center;
 }
-.fixed-width-100 {
-  width: 100px;
-  max-width: 100px;
-  min-width: 100px;
+.card-container {
+  margin-left: 7%;
+  height: 200px;
 }
-.fixed-width-120 {
-  width: 120px;
-  max-width: 120px;
-  min-width: 120px;
+.card {
+  background: #FFF;
+  width: 80%;
+  height: 200px;
+  text-align: center;
+  margin: auto;
+  padding: 0 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: table;
+  position: absolute;
 }
-.fixed-width-150 {
-  width: 150px;
-  max-width: 150px;
-  min-width: 100px;
+.card h1 {
+  margin: 0;
+  display: table-cell;
+  vertical-align: middle;
+}
+.card h1 button {
+  display: none;
+  margin-top: 20px;
+}
+.card-bottom {
+  background: #DDD;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 80%;
+  height: 190px;
+  margin: auto;
+  position: absolute;
+  transform: translate(10px, 5px);
+}
+.move-left {
+  transform: translate(-500px, 0) scale(0.8);
+  transition: .8s;
+  cursor: e-resize;
+  opacity: 0;
+}
+.move-right {
+  transform: translate(500px, 0) scale(0.8);
+  transition: .8s;
+  cursor: e-resize;
+  opacity: 0;
 }
 /**pagination start**/
 .page {
@@ -258,12 +291,6 @@ body {
   color: #ffffff;
   border: 1px solid #55a7ec;
   outline: 0;
-}
-#import-csv {
-  position: absolute;
-  height: 34px;
-  width: 82px;
-  opacity: 0;
 }
 .turnPage {
   color: #777;

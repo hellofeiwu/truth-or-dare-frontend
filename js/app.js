@@ -7,7 +7,7 @@
 *
 * */
 
-var app = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'mgcrea.ngStrap', 'angular-loading-bar', 'ngAnimate']);
+var app = angular.module('myApp', ['ngRoute', 'ngTouch', 'pascalprecht.translate', 'mgcrea.ngStrap', 'angular-loading-bar', 'ngAnimate']);
 
 app.config(function(
     $routeProvider,
