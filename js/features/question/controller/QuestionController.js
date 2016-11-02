@@ -70,7 +70,6 @@ app.controller('QuestionController', function(
 
     $scope.getQuestion = function() {
         if ($scope.type == 'truth') {
-            console.log(truthQuestions.length);
             $scope.questions = truthQuestions;
         }else {
             $scope.questions = dareQuestions;

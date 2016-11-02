@@ -21,11 +21,12 @@ body {
 .header div span {
   padding: 0 15px;
 }
-.loading-message {
-  position: fixed;
-  left: 30px;
-  top: 8px;
-  z-index: 1000;
+.center {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .login {
   text-align: center;
@@ -210,8 +211,8 @@ body {
   text-align: center;
 }
 .card-container {
-  margin-left: 7%;
   height: 200px;
+  margin-left: 10%;
 }
 .card {
   background: #FFF;

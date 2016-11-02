@@ -1,26 +1,32 @@
 <div class="container">
-    <div ng-if="pageFlag == 'question'">
-        <div class="card-container" ng-swipe-left="swipeLeft()" ng-swipe-right="swipeRight()">
-            <div class="card-bottom">loading...</div>
+    <div style="position: relative; height: 100vh">
+        <div ng-if="pageFlag == 'question'"
+             class="center"
+                >
+            <div class="card-container" ng-swipe-left="swipeLeft()" ng-swipe-right="swipeRight()">
+                <div class="card-bottom">loading...</div>
+            </div>
+            <button ng-click="toggleType()" ng-if="type == 'truth'">dare</button>
+            <button ng-click="toggleType()" ng-if="type == 'dare'">truth</button>
+            <button ng-click="restoreQuestions()">restore</button>
         </div>
-        <button ng-click="toggleType()" ng-if="type == 'truth'">dare</button>
-        <button ng-click="toggleType()" ng-if="type == 'dare'">truth</button>
-        <button ng-click="restoreQuestions()">restore</button>
-    </div>
-    <div ng-if="pageFlag == 'addQuestion'">
+        <div ng-if="pageFlag == 'addQuestion'"
+             class="center"
+                >
         <textarea
                 rows="3"
                 placeholder="Type your questions here..."
                 ng-model="newQuestion.question"
                 >
         </textarea>
-        <select
-                class="form-control"
-                ng-model="newQuestion.type"
-                ng-options="type as type for type in types"
-                >
-        </select>
-        <button ng-click="addQuestion()">Submit</button>
-        <button ng-click="showQuestion()">Cancel</button>
+            <select
+                    class="form-control"
+                    ng-model="newQuestion.type"
+                    ng-options="type as type for type in types"
+                    >
+            </select>
+            <button ng-click="addQuestion()">Submit</button>
+            <button ng-click="showQuestion()">Cancel</button>
+        </div>
     </div>
 </div>
