@@ -28,6 +28,12 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.truth-bg {
+  background: url('../img/bg_1.jpg') no-repeat fixed center / cover;
+}
+.dare-bg {
+  background: url('../img/bg_2.jpg') no-repeat fixed center / cover;
+}
 .login {
   text-align: center;
   margin: 60px 0;
@@ -63,13 +69,11 @@ body {
   border: none;
   background: rgba(255, 255, 255, 0);
 }
-.import {
-  float: right;
-  margin-left: 15px;
-}
-.date-picker {
-  width: 15%;
-  float: right;
+.tool {
+  margin: 10px 10% 10px 10%;
+  color: #e0e0e0;
+  font-size: 2.5em;
+  font-family: 'Sonsie One', cursive;
 }
 .search {
   width: 30%;

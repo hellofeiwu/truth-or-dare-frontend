@@ -1,4 +1,6 @@
-<div class="container">
+<div class="container"
+     ng-class="{'truth-bg': type == 'truth', 'dare-bg': type == 'dare'}"
+        >
     <div style="position: relative; height: 100vh">
         <div ng-if="pageFlag == 'question'"
              class="center"
@@ -6,9 +8,13 @@
             <div class="card-container" ng-swipe-left="swipeLeft()" ng-swipe-right="swipeRight()">
                 <div class="card-bottom">loading...</div>
             </div>
-            <button ng-click="toggleType()" ng-if="type == 'truth'">dare</button>
-            <button ng-click="toggleType()" ng-if="type == 'dare'">truth</button>
-            <button ng-click="restoreQuestions()">restore</button>
+            <div class="tool">
+                <span ng-click="toggleType()" ng-if="type == 'truth'">Dare</span>
+                <span ng-click="toggleType()" ng-if="type == 'dare'">Truth</span>
+                <span ng-click="restoreQuestions()" style="float: right">
+                    <i class="fa fa-repeat"></i>
+                </span>
+            </div>
         </div>
         <div ng-if="pageFlag == 'addQuestion'"
              class="center"

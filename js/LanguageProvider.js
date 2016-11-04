@@ -2,7 +2,7 @@ app.provider('Language', function LanguageProvider($translateProvider, CONF) {
 
     this.setLang = function() {
         $translateProvider.translations('en', {
-            title: 'ACP Shipping',
+            title: 'Truth or Dare',
             add: 'Add',
             edit: 'Edit',
             save: 'Save',
@@ -38,7 +38,7 @@ app.provider('Language', function LanguageProvider($translateProvider, CONF) {
             commodity_doc_photo: 'Commodity Doc Photo'
         });
         $translateProvider.translations('zh', {
-            title: '航都货运',
+            title: '真心话，大冒险',
             add: '添加',
             edit: '编辑',
             save: '保存',
